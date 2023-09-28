@@ -1,0 +1,18 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+<h1>Clientes</h1>
+<div  style="display: flex; column-gap: 10px;">
+     <button>
+        <a href="{% url 'CreaCliente' %}">Crear Cliente</a>
+    </button>
+</div>
+<p></p>
+<p>Buscar un Cliente</p>
+<form action="{% url 'BuscarCliente' %}" method="get">
+    <p>Cliente : <input type="str" name="nombre"></p>
+    <button type="submit"> Buscar </button>
+</form>
+
+{% endblock contenidoQuecambia %}

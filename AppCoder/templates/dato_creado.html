@@ -1,0 +1,18 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+
+    <h4>{{vista}} Creado!!!</h4>
+
+    <button>
+        {% if vista == 'Cliente' %}
+            <a href="{% url 'Cliente' %}"> Volver </a>
+        {% elif vista == 'Categoria' %}
+            <a href="{% url 'Categoria' %}"> Volver </a>
+        {% elif vista == 'Articulo' %}
+            <a href="{% url 'Articulo' %}"> Volver </a>    
+        {% endif %}
+    </button>
+    
+{% endblock contenidoQuecambia %}

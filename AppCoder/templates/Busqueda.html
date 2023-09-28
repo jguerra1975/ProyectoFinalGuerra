@@ -1,0 +1,27 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+   
+    <p>Resultados de la busqueda de {{vista}}</p>
+    
+    {% if datos %}    
+        <ul>
+            {% for dato in datos %}
+                <li>{{dato}}</li>
+            {% endfor %}
+        </ul>
+        <button>
+            {% if vista == 'Clientes' %}
+                <a href="{% url 'Cliente' %}"> Volver </a>
+            {% elif vista == 'Categorias' %}
+                <a href="{% url 'Categoria' %}"> Volver </a>
+            {% elif vista == 'Articulos' %}
+                <a href="{% url 'Articulo' %}"> Volver </a>    
+            {% endif %}
+        </button>
+    {% else %}
+        <p> No hay Resultados en la busqueda</p>
+    {% endif %}
+
+{% endblock contenidoQuecambia %}
