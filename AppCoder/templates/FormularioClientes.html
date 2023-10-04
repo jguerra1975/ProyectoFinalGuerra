@@ -4,6 +4,7 @@
 {% block contenidoQuecambia %}
         <form action="{% url 'CreaCliente' %}" method="post">{% csrf_token %}
             {{miFormulario.as_p}}
+            {{userForm.as_p}}
             <button type="submit"> Enviar </button>
             <button>
                 <a href="{% url 'Cliente' %}"> Volver </a>

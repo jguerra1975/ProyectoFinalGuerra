@@ -1,5 +1,14 @@
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import DeleteView, UpdateView, CreateView
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User, Group
 from .models import Articulos, Categorias, Clientes
 from .forms import FormularioClientes, FormularioCategorias, FormularioArticulos
 
@@ -13,19 +22,19 @@ def inicio(req):
 def Pagina_Cliente(req):
     return render(req, "clientes.html")
 
-def Crea_Cliente(req):
-    print('method', req.method)
-    print('POST', req.POST)
-    if req.method == 'POST':
-        miFormulario = FormularioClientes(req.POST)
-        if miFormulario.is_valid():
-            data = miFormulario.cleaned_data
-            cliente = Clientes(dni=data["dni"], nombre=data["nombre"], apellidoPaterno=data["apellidoPaterno"], apellidoMaterno=data["apellidoMaterno"], email=data["email"])
-            cliente.save()
-            return render(req, "dato_creado.html", {"vista": 'Cliente'})
-    else:
-        miFormulario = FormularioClientes()
-        return render(req, "FormularioClientes.html", {"miFormulario": miFormulario})
+#def Crea_Cliente(req):
+#    print('method', req.method)
+#    print('POST', req.POST)
+#    if req.method == 'POST':
+#        miFormulario = FormularioClientes(req.POST)
+#        if miFormulario.is_valid():
+#            data = miFormulario.cleaned_data
+#            cliente = Clientes(dni=data["dni"], nombre=data["nombre"], apellidoPaterno=data["apellidoPaterno"], apellidoMaterno=data["apellidoMaterno"], email=data["email"])
+#            cliente.save()
+#            return render(req, "dato_creado.html", {"vista": 'Cliente'})
+#    else:
+#        miFormulario = FormularioClientes()
+#        return render(req, "FormularioClientes.html", {"miFormulario": miFormulario})
         
 def Lista_Cliente(req):
     return render(req, "dato_creado.html")
@@ -142,3 +151,43 @@ def Busca_Articulo(req: HttpRequest):
         return render(req, "Busqueda.html", {"datos": datos, "vista": "Articulos"})
     else:
         return render(req, "no_existe_dato.html", {"vista": 'Articulos'})
+    
+def Crea_Cliente(req):
+
+    if req.method == 'POST':
+
+        info = req.POST
+
+        miFormulario = FormularioClientes({
+            "dni": info["dni"],
+            "nombre": info["nombre"],
+            "apellidoPaterno": info["apellidoPaterno"],
+            "apellidoMaterno": info["apellidoMaterno"],
+            "email": info["email"]
+        })
+        userForm = UserCreationForm({
+            "username": info["username"],
+            "password1": info["password1"],
+            "password2": info["password2"]
+        })
+        if miFormulario.is_valid() and userForm.is_valid():
+
+            data = miFormulario.cleaned_data
+            data.update(userForm.cleaned_data)
+
+            user = User(username=data["username"])
+            user.set_password(data["password1"])
+            user.save()
+
+            grupo = Group.objects.get(name='GrupoClientes')
+            user.groups.add(grupo)
+
+            cliente = Clientes(dni=data["dni"], nombre=data["nombre"], apellidoPaterno=data["apellidoPaterno"], apellidoMaterno=data["apellidoMaterno"], email=data["email"], user=user)
+            cliente.save() 
+
+            return render(req, "dato_creado.html", {"vista": 'Cliente'})
+    else:
+
+        miFormulario = FormularioClientes()
+        userForm = UserCreationForm()
+        return render(req, "FormularioClientes.html", {"miFormulario": miFormulario, "userForm": userForm})
