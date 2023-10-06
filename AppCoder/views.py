@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User, Group
 from .models import Articulos, Categorias, Clientes
-from .forms import FormularioClientes, FormularioCategorias, FormularioArticulos
+from .forms import FormularioClientes, FormularioCategorias, FormularioArticulos, UserCreateForm
 
 # Create your views here.
 
@@ -20,21 +20,56 @@ def inicio(req):
 ########### Clientes ##############
 
 def Pagina_Cliente(req):
-    return render(req, "clientes.html")
+    return render(req, "busca_cliente.html")
 
-#def Crea_Cliente(req):
-#    print('method', req.method)
-#    print('POST', req.POST)
-#    if req.method == 'POST':
-#        miFormulario = FormularioClientes(req.POST)
-#        if miFormulario.is_valid():
-#            data = miFormulario.cleaned_data
-#            cliente = Clientes(dni=data["dni"], nombre=data["nombre"], apellidoPaterno=data["apellidoPaterno"], apellidoMaterno=data["apellidoMaterno"], email=data["email"])
-#            cliente.save()
-#            return render(req, "dato_creado.html", {"vista": 'Cliente'})
-#    else:
-#        miFormulario = FormularioClientes()
-#        return render(req, "FormularioClientes.html", {"miFormulario": miFormulario})
+def Crea_Cliente(req):
+
+    if req.method == 'POST':
+
+        info = req.POST
+
+        miFormulario = FormularioClientes({
+            "dni": info["dni"],
+            "nombre": info["nombre"],
+            "apellidoPaterno": info["apellidoPaterno"],
+            "apellidoMaterno": info["apellidoMaterno"],
+            "email": info["email"]
+        })
+        userForm = UserCreateForm({
+            "username": info["username"],
+            "password1": info["password1"],
+            "password2": info["password2"]
+        })
+        if miFormulario.is_valid() and userForm.is_valid():
+
+            data = miFormulario.cleaned_data
+            data.update(userForm.cleaned_data)
+            user = User(username=data["username"], first_name=data["nombre"], last_name=data["apellidoPaterno"], email=data["email"])
+            user.set_password(data["password1"])
+            user.is_staff = True
+            user.save()
+            grupo = Group.objects.get(name='GrupoClientes')
+            user.groups.add(grupo)
+            
+            cliente = Clientes(dni=data["dni"], nombre=data["nombre"], apellidoPaterno=data["apellidoPaterno"], apellidoMaterno=data["apellidoMaterno"], email=data["email"], user=user)
+            cliente.save() 
+
+            return render(req, "dato_creado.html", {"vista": 'Cliente'})
+        else:
+            return render(req, "FormularioClientes.html", {"miFormulario": miFormulario, "userForm": userForm})
+    else:
+
+        miFormulario = FormularioClientes()
+        userForm = UserCreateForm()
+        return render(req, "FormularioClientes.html", {"miFormulario": miFormulario, "userForm": userForm})
+    
+
+def Cliente_List(req):
+    datos = Clientes.objects.all()
+    print('method', req.method)
+    print('GET', req.GET)
+    print(f'{datos}')
+    return render(req, "clientes_list.html", {"lista_clientes": datos})
         
 def Lista_Cliente(req):
     return render(req, "dato_creado.html")
@@ -69,7 +104,69 @@ def Busca_Cliente(req: HttpRequest):
         return render(req, "Busqueda.html", {"datos": datos, "vista": "Clientes"})
     else:
         return render(req, "no_existe_dato.html", {"vista": 'Clientes'})
-    
+
+class ClienteDetail(DetailView):
+    model = Clientes
+    template_name = "cliente_detail.html"
+    context_object_name = "cliente"
+
+#class ClienteUpdate(UpdateView):
+#    model = Clientes
+#    template_name = "cliente_update.html"
+#    fields = ("dni", "nombre", "apellidoPaterno", "apellidoMaterno", "email")
+#    success_url = '/app-coder/cliente-list'
+#    context_object_name = "cliente"
+
+def ClienteUpdate(req, id):
+    cliente = Clientes.objects.get(id=id)
+    print(f'{cliente.user}')
+    if req.method == 'POST':
+
+        miFormulario = FormularioClientes(req.POST)
+
+        if miFormulario.is_valid():
+
+            data = miFormulario.cleaned_data
+            cliente.dni = data["dni"]
+            cliente.nombre = data["nombre"]
+            cliente.apellidoPaterno = data["apellidoPaterno"]
+            cliente.apellidoMaterno = data["apellidoMaterno"]
+            cliente.email = data["email"]
+            cliente.save()
+
+            usuario = User.objects.get(username = cliente.user)
+            usuario.first_name = data["nombre"]
+            usuario.last_name = data["apellidoPaterno"]
+            usuario.email = data["email"]
+            usuario.save()
+            
+            datos = Clientes.objects.all()
+            return render(req, "clientes_list.html", {"lista_clientes": datos})
+    else:
+        miFormulario = FormularioClientes({
+            "dni": cliente.dni,
+            "nombre": cliente.nombre,
+            "apellidoPaterno": cliente.apellidoPaterno,
+            "apellidoMaterno": cliente.apellidoMaterno,
+            "email": cliente.email
+            })
+        return render(req, "cliente_update.html", {"miFormulario": miFormulario, "cliente": cliente})
+
+def ClienteDelete(req, id):
+    print('method', req.method)
+    print('GET', req.GET)
+    cliente = Clientes.objects.get(id=id)
+    print (f'{cliente.user}')
+    if req.method == 'POST':
+        cliente.delete()
+        usuario = User.objects.get(username = cliente.user)
+        usuario.delete()
+        cliente = Clientes.objects.all()
+        return render(req, "clientes_list.html", {"lista_clientes": cliente})
+    return render(req, "cliente_delete.html", {"cliente": cliente})
+
+
+
 ########### Categorias ##############
 
 def Pagina_Categoria(req):
@@ -152,42 +249,3 @@ def Busca_Articulo(req: HttpRequest):
     else:
         return render(req, "no_existe_dato.html", {"vista": 'Articulos'})
     
-def Crea_Cliente(req):
-
-    if req.method == 'POST':
-
-        info = req.POST
-
-        miFormulario = FormularioClientes({
-            "dni": info["dni"],
-            "nombre": info["nombre"],
-            "apellidoPaterno": info["apellidoPaterno"],
-            "apellidoMaterno": info["apellidoMaterno"],
-            "email": info["email"]
-        })
-        userForm = UserCreationForm({
-            "username": info["username"],
-            "password1": info["password1"],
-            "password2": info["password2"]
-        })
-        if miFormulario.is_valid() and userForm.is_valid():
-
-            data = miFormulario.cleaned_data
-            data.update(userForm.cleaned_data)
-
-            user = User(username=data["username"])
-            user.set_password(data["password1"])
-            user.save()
-
-            grupo = Group.objects.get(name='GrupoClientes')
-            user.groups.add(grupo)
-
-            cliente = Clientes(dni=data["dni"], nombre=data["nombre"], apellidoPaterno=data["apellidoPaterno"], apellidoMaterno=data["apellidoMaterno"], email=data["email"], user=user)
-            cliente.save() 
-
-            return render(req, "dato_creado.html", {"vista": 'Cliente'})
-    else:
-
-        miFormulario = FormularioClientes()
-        userForm = UserCreationForm()
-        return render(req, "FormularioClientes.html", {"miFormulario": miFormulario, "userForm": userForm})

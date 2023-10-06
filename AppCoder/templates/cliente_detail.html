@@ -1,0 +1,14 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+    <h1>DETALLE CLIENTES</h1>
+    <h4>DNI              : {{cliente.dni}}</h4>
+    <h4>NOMBRE           : {{cliente.nombre}}</h4>
+    <h4>APELLIDO PATERNO : {{cliente.apellidoPaterno}}</h4>
+    <h4>APELLIDO MATERNO : {{cliente.apellidoMaterno}}</h4>
+    <h4>EMAIL            : {{cliente.email}}</h4>
+    <button>
+        <a href="{% url 'ListarClientes' %}" > Volver </a>
+    </button>
+{% endblock contenidoQuecambia %}

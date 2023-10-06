@@ -1,0 +1,25 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+<h3>LISTA DE CLIENTES</h3>
+<ul>
+  {% for clientes in lista_clientes %}   
+
+      <div  style="display: flex; column-gap: 5px;">
+          
+          <li>{{clientes.dni}} - {{clientes.nombre}} - {{clientes.apellidoPaterno}} - {{clientes.apellidoMaterno}} - {{clientes.email}} </li>
+          <button>
+            <a href="{% url 'EliminarClientes' clientes.id %}" > Eliminar </a>
+          </button>
+          <button>
+            <a href="{% url 'EditarClientes' clientes.id %}" > Editar </a>
+          </button>
+          <button>
+            <a href="{% url 'DetalleClientes' clientes.id %}" > Detalle </a>
+          </button>
+      </div>
+  {% endfor %}
+</ul>
+    
+{% endblock contenidoQuecambia %}

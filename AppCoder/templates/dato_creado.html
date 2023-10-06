@@ -7,11 +7,11 @@
 
     <button>
         {% if vista == 'Cliente' %}
-            <a href="{% url 'Cliente' %}"> Volver </a>
+            <a href="{% url 'Inicio' %}"> Volver </a>
         {% elif vista == 'Categoria' %}
-            <a href="{% url 'Categoria' %}"> Volver </a>
+            <a href="{% url 'Inicio' %}"> Volver </a>
         {% elif vista == 'Articulo' %}
-            <a href="{% url 'Articulo' %}"> Volver </a>    
+            <a href="{% url 'Inicio' %}"> Volver </a>    
         {% endif %}
     </button>
     
