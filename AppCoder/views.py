@@ -120,9 +120,9 @@ def ClienteUpdate(req, id):
 
             data = miFormulario.cleaned_data
             cliente.dni = data["dni"]
-            cliente.nombre = data["nombre"]
-            cliente.apellidoPaterno = data["apellidoPaterno"]
-            cliente.apellidoMaterno = data["apellidoMaterno"]
+            cliente.nombre = data["nombre"].capitalize()
+            cliente.apellidoPaterno = data["apellidoPaterno"].capitalize()
+            cliente.apellidoMaterno = data["apellidoMaterno"].capitalize()
             cliente.email = data["email"]
             cliente.save()
 
