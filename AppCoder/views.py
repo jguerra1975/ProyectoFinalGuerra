@@ -27,12 +27,11 @@ def Crea_Cliente(req):
     if req.method == 'POST':
 
         info = req.POST
-
         miFormulario = FormularioClientes({
             "dni": info["dni"],
-            "nombre": info["nombre"],
-            "apellidoPaterno": info["apellidoPaterno"],
-            "apellidoMaterno": info["apellidoMaterno"],
+            "nombre": info["nombre"].capitalize(),
+            "apellidoPaterno": info["apellidoPaterno"].capitalize(),
+            "apellidoMaterno": info["apellidoMaterno"].capitalize(),
             "email": info["email"]
         })
         userForm = UserCreateForm({
@@ -110,13 +109,6 @@ class ClienteDetail(DetailView):
     template_name = "cliente_detail.html"
     context_object_name = "cliente"
 
-#class ClienteUpdate(UpdateView):
-#    model = Clientes
-#    template_name = "cliente_update.html"
-#    fields = ("dni", "nombre", "apellidoPaterno", "apellidoMaterno", "email")
-#    success_url = '/app-coder/cliente-list'
-#    context_object_name = "cliente"
-
 def ClienteUpdate(req, id):
     cliente = Clientes.objects.get(id=id)
     print(f'{cliente.user}')
@@ -139,15 +131,15 @@ def ClienteUpdate(req, id):
             usuario.last_name = data["apellidoPaterno"]
             usuario.email = data["email"]
             usuario.save()
-            
+
             datos = Clientes.objects.all()
             return render(req, "clientes_list.html", {"lista_clientes": datos})
     else:
         miFormulario = FormularioClientes({
             "dni": cliente.dni,
-            "nombre": cliente.nombre,
-            "apellidoPaterno": cliente.apellidoPaterno,
-            "apellidoMaterno": cliente.apellidoMaterno,
+            "nombre": cliente.nombre.capitalize(),
+            "apellidoPaterno": cliente.apellidoPaterno.capitalize(),
+            "apellidoMaterno": cliente.apellidoMaterno.capitalize(),
             "email": cliente.email
             })
         return render(req, "cliente_update.html", {"miFormulario": miFormulario, "cliente": cliente})

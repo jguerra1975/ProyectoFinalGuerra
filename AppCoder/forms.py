@@ -1,3 +1,4 @@
+from typing import Any
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
@@ -16,7 +17,12 @@ class FormularioClientes(forms.ModelForm):
     class Meta:
         model=Clientes
         fields = ("dni", "nombre", "apellidoPaterno", "apellidoMaterno", "email")
-
+        labels = {"dni": "DNI",
+                  "nombre":"Nombre",
+                  "apellidoPaterno": "Apellido Materno",
+                  "apellidoMaterno": "Apellido Paterno",
+                  "email": "Email"
+                  }
 class UserCreateForm(UserCreationForm):
 
 #    password = forms.CharField(
@@ -30,6 +36,7 @@ class UserCreateForm(UserCreationForm):
     class Meta:
         model=User
         fields = ("username", "password1", "password2")
+        labels = {"username": "Nombre de Usuario"}
 
     def clean_password2(self):
 
@@ -41,3 +48,4 @@ class UserCreateForm(UserCreationForm):
         if password1 != password2:
             raise forms.ValidationError("Las contraseñas no coinciden!!!!")
         return password2
+    

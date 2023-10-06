@@ -3,7 +3,7 @@
     <form action="{% url 'EditarClientes' cliente.id %}" method="post">{% csrf_token %}
         <h4>Edita Clientes</h4>
         <p></p>
-        <a>Usuario : {{cliente.user}}</a>
+        <h6>Usuario : {{cliente.user}}</h6>
         <p></p>
         {{miFormulario.as_p}}
         <button type="submit"> Actualizar </button>
