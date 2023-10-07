@@ -1,0 +1,13 @@
+{% extends 'inicio.html' %}
+{% block contenidoQuecambia %}
+    <form action="{% url 'EditarUsuarios' usuario.id %}" method="post">{% csrf_token %}
+        <h4>Edita Usuarios</h4>
+        <p></p>
+        <h6>Usuario : {{usuario.user}}</h6>
+        <p></p>
+        {{miFormulario.as_p}}
+        <button type="submit"> Actualizar </button>
+        <button ><a href="{% url 'ListarUsuarios' %}"> Cancelar </a></button>
+    </form>
+  
+{% endblock contenidoQuecambia %}

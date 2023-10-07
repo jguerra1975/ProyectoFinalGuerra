@@ -6,13 +6,7 @@
     <h4>{{vista}} Creado!!!</h4>
 
     <button>
-        {% if vista == 'Cliente' %}
-            <a href="{% url 'Inicio' %}"> Volver </a>
-        {% elif vista == 'Categoria' %}
-            <a href="{% url 'Inicio' %}"> Volver </a>
-        {% elif vista == 'Articulo' %}
-            <a href="{% url 'Inicio' %}"> Volver </a>    
-        {% endif %}
+        <a href="{% url 'Inicio' %}"> Volver </a>    
     </button>
     
 {% endblock contenidoQuecambia %}

@@ -1,0 +1,11 @@
+{% extends 'inicio.html' %}
+{% block contenidoQuecambia %}
+    <form action="{% url 'EditarArticulos' articulo.id %}" enctype="multipart/form-data" method="post">{% csrf_token %}
+        <h4>Edita Articulos</h4>
+        <p></p>
+        {{miFormulario.as_p}}
+        <button type="submit"> Actualizar </button>
+        <button ><a href="{% url 'ListarArticulos' %}"> Cancelar </a></button>
+    </form>
+  
+{% endblock contenidoQuecambia %}

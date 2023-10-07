@@ -1,0 +1,14 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+    <h1>DETALLE USUARIOS</h1>
+    <h4>DNI              : {{usuario.dni}}</h4>
+    <h4>NOMBRE           : {{usuario.nombre}}</h4>
+    <h4>APELLIDO PATERNO : {{usuario.apellidoPaterno}}</h4>
+    <h4>APELLIDO MATERNO : {{usuario.apellidoMaterno}}</h4>
+    <h4>EMAIL            : {{usuario.email}}</h4>
+    <button>
+        <a href="{% url 'ListarUsuarios' %}" > Volver </a>
+    </button>
+{% endblock contenidoQuecambia %}

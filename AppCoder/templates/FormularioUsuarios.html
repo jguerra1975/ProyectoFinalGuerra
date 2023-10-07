@@ -1,0 +1,14 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+        <h4>Creacion de Usuarios</h4>
+        <form action="{% url 'CreaUsuario' %}" method="post">{% csrf_token %}
+            {{miFormulario.as_p}}
+            {{userForm.as_p}}
+            <button type="submit"> Crear </button>
+            <button>
+                <a href="{% url 'Inicio' %}"> Volver </a>
+            </button>
+        </form>
+{% endblock contenidoQuecambia %}

@@ -36,10 +36,9 @@
                       Usuarios
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Crear</a></li>
-                      <li><a class="dropdown-item" href="#">Editar</a></li>
-                      <li><a class="dropdown-item" href="#">Listar</a></li>
-                      <li><a class="dropdown-item" href="#">Buscar</a></li>
+                      <li><a class="dropdown-item" href="{% url 'CreaUsuario' %}">Crear</a></li>
+                      <li><a class="dropdown-item" href="{% url 'ListarUsuarios' %}">Listar/Editar/Eliminar</a></li>
+                      <li><a class="dropdown-item" href="{% url 'BuscarUsuario' %}">Buscar</a></li>
                       <!--<li><hr class="dropdown-divider"></li>-->
                     </ul>  
                   </li>
@@ -48,10 +47,9 @@
                       Categorias
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Crear</a></li>
-                      <li><a class="dropdown-item" href="#">Editar</a></li>
-                      <li><a class="dropdown-item" href="#">Listar</a></li>
-                      <li><a class="dropdown-item" href="#">Buscar</a></li>
+                      <li><a class="dropdown-item" href="{% url 'CreaCategoria' %}">Crear</a></li>
+                      <li><a class="dropdown-item" href="{% url 'ListarCategorias' %}">Listar/Editar/Eliminar</a></li>
+                      <li><a class="dropdown-item" href="{% url 'BuscarCategoria' %}">Buscar</a></li>
                       <!--<li><hr class="dropdown-divider"></li>-->
                     </ul>  
                   </li>
@@ -60,19 +58,34 @@
                       Articulos
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Crear</a></li>
-                      <li><a class="dropdown-item" href="#">Editar</a></li>
-                      <li><a class="dropdown-item" href="#">Listar</a></li>
-                      <li><a class="dropdown-item" href="#">Buscar</a></li>
+                      <li><a class="dropdown-item" href="{% url 'CreaArticulo' %}">Crear</a></li>
+                      <li><a class="dropdown-item" href="{% url 'ListarArticulos' %}">Listar/Editar/Eliminar</a></li>
+                      <li><a class="dropdown-item" href="{% url 'BuscarArticulo' %}">Buscar</a></li>
                       <!--<li><hr class="dropdown-divider"></li>-->
                     </ul>  
                   </li>
+                  {% if user.is_authenticated %}
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{user.first_name}}
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url 'CambiaPassword' %}">Cambiar Contraseña</a></li>
+
+                      <!--<li><hr class="dropdown-divider"></li>-->
+                    </ul>  
+                  </li>
+                  {% endif %}
                   <!--<li class="nav-item">
                     <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                   </li>-->
                 </ul>
-                
-                <a class="btn btn-primary" href="#signup">Login</a>
+                {% if user.is_authenticated %}
+                  <p>Bienvenido(a) {{user.first_name}}  .</p>
+                  <a class="btn btn-primary" href="{% url 'Logout' %}">Logout</a>
+                {% else %}
+                  <a class="btn btn-primary" href="{% url 'Login' %}">Login</a>
+                {% endif %}
                 </form>
               </div>
             </div>

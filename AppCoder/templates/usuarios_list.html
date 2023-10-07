@@ -2,7 +2,7 @@
 
 
 {% block contenidoQuecambia %}
-<h3>LISTA DE CLIENTES</h3>
+<h3>LISTA DE USUARIOS</h3>
 <div class="container text-center">
   <div class="row">
     <div class="col">
@@ -25,28 +25,28 @@
     </div>
   </div>
 </div>
-  {% for clientes in lista_clientes %}   
+  {% for usuarios in lista_usuarios %}   
 
       <div  style="display: flex; column-gap: 5px;">
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              {{clientes.user}}
+              {{usuarios.user}}
             </div>
             <div class="col">
-              {{clientes.dni}}
+              {{usuarios.dni}}
             </div>
             <div class="col">
-              {{clientes.nombre}}
+              {{usuarios.nombre}}
             </div>
             <div class="col">
-              {{clientes.apellidoPaterno}}
+              {{usuarios.apellidoPaterno}}
             </div>
             <div class="col">
-              {{clientes.apellidoMaterno}}
+              {{usuarios.apellidoMaterno}}
             </div>
             <div class="col">
-              {{clientes.email}}
+              {{usuarios.email}}
             </div>
           </div>
         </div>
@@ -54,13 +54,13 @@
           <li>{{clientes.user}} {{clientes.dni}} - {{clientes.nombre}} - {{clientes.apellidoPaterno}} - {{clientes.apellidoMaterno}} - {{clientes.email}} </li>
   -->
           <button>
-            <a href="{% url 'EliminarClientes' clientes.id %}" > Eliminar </a>
+            <a href="{% url 'EliminarUsuarios' usuarios.id %}" > Eliminar </a>
           </button>
           <button>
-            <a href="{% url 'EditarClientes' clientes.id %}" > Editar </a>
+            <a href="{% url 'EditarUsuarios' usuarios.id %}" > Editar </a>
           </button>
           <button>
-            <a href="{% url 'DetalleClientes' clientes.id %}" > Detalle </a>
+            <a href="{% url 'DetalleUsuarios' usuarios.id %}" > Detalle </a>
           </button>
       </div>
   {% endfor %}

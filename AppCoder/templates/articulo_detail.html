@@ -1,0 +1,14 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+    <h1>DETALLE ARTICULO</h1>
+    <img height="280px" src="{{articulo.imagen.url}}" alt="Imagen"/>
+    <h4>SKU       : {{articulo.sku}}</h4>
+    <h4>NOMBRE    : {{articulo.nombre}}</h4>
+    <h4>PRECIO    : $ {{articulo.precio}}</h4>
+    <h4>CATEGORIA : {{articulo.id_categoria}}</h4>
+    <button>
+        <a href="{% url 'ListarArticulos' %}" > Volver </a>
+    </button>
+{% endblock contenidoQuecambia %}

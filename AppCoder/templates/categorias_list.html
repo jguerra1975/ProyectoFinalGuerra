@@ -1,0 +1,44 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+<h3>LISTA DE CATEGORIAS</h3>
+<div class="container text-center">
+  <div class="row">
+    <div class="col">
+      Nombre
+    </div>
+    <div class="col">
+      Ubicacion
+    </div>
+  </div>
+</div>
+  {% for categorias in lista_categorias %}   
+
+      <div  style="display: flex; column-gap: 5px;">
+        <div class="container text-center">
+          <div class="row">
+            <div class="col">
+              {{categorias.nombreCategoria}}
+            </div>
+            <div class="col">
+              {{categorias.ubicacion}}
+            </div>
+          </div>
+        </div>
+ <!--         
+          <li>{{clientes.user}} {{clientes.dni}} - {{clientes.nombre}} - {{clientes.apellidoPaterno}} - {{clientes.apellidoMaterno}} - {{clientes.email}} </li>
+  -->
+          <button>
+            <a href="{% url 'EliminarCategorias' categorias.id %}" > Eliminar </a>
+          </button>
+          <button>
+            <a href="{% url 'EditarCategorias' categorias.id %}" > Editar </a>
+          </button>
+          <button>
+            <a href="{% url 'DetalleCategorias' categorias.id %}" > Detalle </a>
+          </button>
+      </div>
+  {% endfor %}
+    
+{% endblock contenidoQuecambia %}

@@ -2,51 +2,45 @@
 
 
 {% block contenidoQuecambia %}
-<h3>LISTA DE CLIENTES</h3>
+<h3>LISTA DE ARTICULOS</h3>
 <div class="container text-center">
   <div class="row">
     <div class="col">
-      User Name
-    </div>
-    <div class="col">
-      DNI
+      SKU
     </div>
     <div class="col">
       Nombre
     </div>
     <div class="col">
-      Apellido Paterno
+        Precio
     </div>
     <div class="col">
-      Apellido Materno
+        Categoria
     </div>
     <div class="col">
-      E-Mail
+      Imagenes
     </div>
   </div>
 </div>
-  {% for clientes in lista_clientes %}   
+  {% for articulos in lista_articulos %}   
 
       <div  style="display: flex; column-gap: 5px;">
         <div class="container text-center">
           <div class="row">
             <div class="col">
-              {{clientes.user}}
+              {{articulos.sku}}
             </div>
             <div class="col">
-              {{clientes.dni}}
+              {{articulos.nombre}}
             </div>
             <div class="col">
-              {{clientes.nombre}}
+                {{articulos.precio}}
             </div>
             <div class="col">
-              {{clientes.apellidoPaterno}}
+                {{articulos.id_categoria}}
             </div>
             <div class="col">
-              {{clientes.apellidoMaterno}}
-            </div>
-            <div class="col">
-              {{clientes.email}}
+                <img height="35px" src="{{articulos.imagen.url}}" alt="Imagen"/>
             </div>
           </div>
         </div>
@@ -54,13 +48,13 @@
           <li>{{clientes.user}} {{clientes.dni}} - {{clientes.nombre}} - {{clientes.apellidoPaterno}} - {{clientes.apellidoMaterno}} - {{clientes.email}} </li>
   -->
           <button>
-            <a href="{% url 'EliminarClientes' clientes.id %}" > Eliminar </a>
+            <a href="{% url 'EliminarArticulos' articulos.id %}" > Eliminar </a>
           </button>
           <button>
-            <a href="{% url 'EditarClientes' clientes.id %}" > Editar </a>
+            <a href="{% url 'EditarArticulos' articulos.id %}" > Editar </a>
           </button>
           <button>
-            <a href="{% url 'DetalleClientes' clientes.id %}" > Detalle </a>
+            <a href="{% url 'DetalleArticulos' articulos.id %}" > Detalle </a>
           </button>
       </div>
   {% endfor %}

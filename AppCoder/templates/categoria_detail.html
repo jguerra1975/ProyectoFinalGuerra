@@ -1,0 +1,11 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+    <h1>DETALLE CATEGORIA</h1>
+    <h4>NOMBRE CATEGORIA : {{categoria.nombreCategoria}}</h4>
+    <h4>UNICACION        : {{categoria.ubicacion}}</h4>
+    <button>
+        <a href="{% url 'ListarCategorias' %}" > Volver </a>
+    </button>
+{% endblock contenidoQuecambia %}

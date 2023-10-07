@@ -14,6 +14,8 @@
         <button>
             {% if vista == 'Clientes' %}
                 <a href="{% url 'Cliente' %}"> Volver </a>
+            {% elif vista == 'Usuarios' %}
+                <a href="{% url 'Usuario' %}"> Volver </a>
             {% elif vista == 'Categorias' %}
                 <a href="{% url 'Categoria' %}"> Volver </a>
             {% elif vista == 'Articulos' %}

@@ -2,6 +2,7 @@
 
 
 {% block contenidoQuecambia %}
+<h4>Creacion de Categorias</h4>
         <form action="{% url 'CreaCategoria' %}" method="post">{% csrf_token %}
             {{miFormulario.as_p}}
             <button type="submit"> Enviar </button>
