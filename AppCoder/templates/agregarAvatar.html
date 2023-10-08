@@ -1,0 +1,12 @@
+{% extends 'inicio.html' %}
+
+{% block contenidoQuecambia %}
+    <h4>Cambiar el Avatar</h4>
+    <h4></h4>
+    <form action="{% url 'AgregarAvatar' %}" enctype="multipart/form-data" method="post">{% csrf_token %}
+
+        {{miFormulario.as_p}}
+
+        <button type="submit"> Enviar </button>
+    </form>
+{% endblock contenidoQuecambia %}

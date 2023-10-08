@@ -87,3 +87,33 @@ class FormularioArticulos(forms.ModelForm):
         model=Articulos
         fields = ("sku", "nombre", "precio", "id_categoria", "imagen")
         labels = {"sku": "SKU", "nombre": "Nombre", "precio": "Precio", "id_categoria": "Categoria", "imagen": "Imagen"}
+
+class AvatarFormulario(forms.ModelForm):
+
+    class Meta:
+        model = Avatar
+        fields = ("imagen",)
+
+class ContactoFormulario(forms.ModelForm):
+
+    class Meta:
+        model = Contacto
+        fields = '__all__'
+        labels = {
+            "nombre": "Nombre", 
+            "correo": "Correo", 
+            "tipo_consulta": "Tipo de Consulta", 
+            "avisos": "Desea ser Contactado?"
+            }
+        
+    def clean_avisos(self):
+        print("va el avisos")
+        print(self.cleaned_data)
+
+        avisos = self.cleaned_data["avisos"]
+
+        if avisos:
+            pass
+        else:
+            avisos=False         
+        return avisos

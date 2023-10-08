@@ -39,8 +39,8 @@
             <div class="col">
                 {{articulos.id_categoria}}
             </div>
-            <div class="col">
-                <img height="35px" src="{{articulos.imagen.url}}" alt="Imagen"/>
+             <div class="col">
+              <img height="35px" src="{{articulos.imagen.url}}" alt="Imagen"/>
             </div>
           </div>
         </div>
@@ -55,6 +55,9 @@
           </button>
           <button>
             <a href="{% url 'DetalleArticulos' articulos.id %}" > Detalle </a>
+          </button>
+          <button>
+            <a href="{% url 'ComentarioArticulo' articulos.id %}" > Comentarios </a>
           </button>
       </div>
   {% endfor %}

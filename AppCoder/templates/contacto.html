@@ -1,0 +1,12 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+        <h6>Contactanos</h6>
+        <form action="{% url 'mensajecontacto' %}" method="post">{% csrf_token %}
+            {{miFormulario.as_p}}
+            
+            <button type="submit"> Enviar </button>
+        </form>
+        <h6>{{mensaje}}</h6>
+{% endblock contenidoQuecambia %}

@@ -41,3 +41,35 @@ class Articulos(models.Model):
 
     def __str__(self):
         return f'{self.sku}  {self.nombre}  {self.precio}'
+
+class ComentarioArticulos(models.Model):
+    sku = models.ForeignKey(Articulos, on_delete=models.CASCADE,null=True, blank=True)
+    comentario = models.CharField(max_length=255,null=False,blank=False)
+
+    def __str__(self):
+        return f'{self.sku}  {self.comentario}'
+
+opciones_consulta = (
+    [0, "Consulta"],
+    [1, "Reclamo"],
+    [2, "Sugerencia"],
+    [3, "Felicitaciones"]
+)
+
+class Contacto(models.Model):
+    nombre = models.CharField(max_length=50)
+    correo = models.EmailField()
+    tipo_consulta = models.IntegerField(choices=opciones_consulta)
+    mensaje = models.TextField()
+    avisos = models.BooleanField()
+
+    def __str__(self):
+        return self.nombre
+    
+
+class Avatar(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='avatares', blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.user}  {self.imagen}'

@@ -1,13 +1,4 @@
-        <!-- Navigation
-        <nav class="navbar navbar-light bg-light static-top">
-            <div class="container">
-                <a class="navbar-brand" href="{% url 'Inicio' %}">Inicio</a>    
-                <a class="navbar-brand" href="{% url 'Cliente' %}">Clientes</a>
-                <a class="navbar-brand" href="{% url 'Categoria' %}">Categorias</a>
-                <a class="navbar-brand" href="{% url 'Articulo' %}">Articulos</a>
-                <a class="btn btn-primary" href="#signup">Login</a>
-            </div>
-        </nav>-->
+        <!-- Navigation-->
         
         <nav class="navbar navbar-expand-lg bg-body-tertiary static-top">
             <div class="container">
@@ -70,23 +61,25 @@
                       {{user.first_name}}
                     </a>
                     <ul class="dropdown-menu">
+                      <img src="{{url_avatar}}" height="120px">
                       <li><a class="dropdown-item" href="{% url 'CambiaPassword' %}">Cambiar Contraseña</a></li>
-
-                      <!--<li><hr class="dropdown-divider"></li>-->
-                    </ul>  
+                      <li><a class="dropdown-item" href="{% url 'AgregarAvatar' %}">Cambiar Avatar</a></li>
+                    </ul>   
                   </li>
                   {% endif %}
                   <!--<li class="nav-item">
                     <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                   </li>-->
                 </ul>
+                
                 {% if user.is_authenticated %}
-                  <p>Bienvenido(a) {{user.first_name}}  .</p>
+                  <img src="{{url_avatar}}" height="30px">
+                  <p>Bienvenido(a)
+                     {{user.first_name}}  .</p>
                   <a class="btn btn-primary" href="{% url 'Logout' %}">Logout</a>
                 {% else %}
                   <a class="btn btn-primary" href="{% url 'Login' %}">Login</a>
                 {% endif %}
-                </form>
               </div>
             </div>
           </nav>

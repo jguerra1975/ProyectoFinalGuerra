@@ -1,0 +1,13 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+<h1>Categorias</h1>
+<p></p>
+<p>Buscar una Categoria</p>
+<form action="{% url 'MuestraCategoria' %}" method="get">
+    <p>Categoria : <input type="str" name="nombre"></p>
+    <button type="submit"> Buscar </button>
+</form>
+
+{% endblock contenidoQuecambia %}

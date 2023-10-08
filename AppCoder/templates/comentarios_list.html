@@ -1,0 +1,24 @@
+{% extends 'inicio.html' %}
+
+
+{% block contenidoQuecambia %}
+   
+    <h6>Comentarios</h6>
+    <h4>SKU : {{articulo.sku}}</h4>
+    <h4>Nombre :{{articulo.nombre}}</h4>  
+        <ul>
+            {% for dato in lista_comentarios %}
+                <li>{{dato.comentario}}</li>
+            {% endfor %}
+        </ul>
+        <form action="{% url 'CrearComentario' articulo.id %}" method="post">{% csrf_token %}
+            <br>
+                <textarea cols="50" rows="5" id="comentario" placeholder="Ingrese un Comentario" name="comentario"></textarea>
+            <br>
+            <button type="submit"> Enviar </button>
+            <button>
+                <a href="{% url 'ListarArticulos' %}"> Volver </a>    
+            </button>
+        </form>
+
+{% endblock contenidoQuecambia %}

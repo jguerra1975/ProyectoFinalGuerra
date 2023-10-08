@@ -9,33 +9,48 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User, Group
-from .models import Articulos, Categorias, Clientes, Usuarios
-from .forms import FormularioClientes, FormularioCategorias, FormularioArticulos, UserCreateForm, FormularioUsuarios, UserEditForm
+from .models import Articulos, Categorias, Clientes, Usuarios, Avatar, ComentarioArticulos, Contacto
+from .forms import FormularioClientes, FormularioCategorias, FormularioArticulos, UserCreateForm, FormularioUsuarios, UserEditForm, AvatarFormulario, ContactoFormulario
 
 # Create your views here.
 
 def inicio(req):
-    return render(req, "inicio.html")
+
+    try:
+        avatar = Avatar.objects.get(user=req.user.id)
+        return render(req, "inicio.html", {"url_avatar": avatar.imagen.url})
+    except:
+        return render(req, "inicio.html")
 
 ########### Clientes ##############
 
 def Pagina_Cliente(req):
-    return render(req, "busca_cliente.html")
-
-@login_required
-def Crea_Cliente(req):
-    groups_required = ['grupo1','grupos2']
-    print(req.user.user_permissions.all())
-    print(req.user.groups.all())
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
     grupos_usuario = req.user.groups.all().values('name')
     print (grupos_usuario)
     for grupo in grupos_usuario:
         print({grupo.values()})
         if grupo['name'] in groups_required:
-            print ('esta dentro del grupo')
+            pass
         else:
-            print ('no esta en el grupo')
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
+    return render(req, "busca_cliente.html")
 
+@login_required
+def Crea_Cliente(req):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     if req.method == 'POST':
 
         info = req.POST
@@ -76,6 +91,17 @@ def Crea_Cliente(req):
     
 @login_required
 def Cliente_List(req):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     datos = Clientes.objects.all()
     print('method', req.method)
     print('GET', req.GET)
@@ -84,10 +110,32 @@ def Cliente_List(req):
 
 @login_required        
 def Lista_Cliente(req):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     return render(req, "dato_creado.html")
 
 @login_required
 def Busca_Cliente(req: HttpRequest):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     print('method', req.method)
     print('GET', req.GET)
     if req.GET["nombre"]:
@@ -119,12 +167,24 @@ def Busca_Cliente(req: HttpRequest):
         return render(req, "no_existe_dato.html", {"vista": 'Clientes'})
 
 class ClienteDetail(LoginRequiredMixin, DetailView):
+    
     model = Clientes
     template_name = "cliente_detail.html"
     context_object_name = "cliente"
 
 @login_required
 def ClienteUpdate(req, id):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     cliente = Clientes.objects.get(id=id)
     print(f'{cliente.user}')
     if req.method == 'POST':
@@ -161,6 +221,17 @@ def ClienteUpdate(req, id):
 
 @login_required
 def ClienteDelete(req, id):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     print('method', req.method)
     print('GET', req.GET)
     cliente = Clientes.objects.get(id=id)
@@ -176,10 +247,32 @@ def ClienteDelete(req, id):
 ########### Usuarios ##############
 @login_required
 def Pagina_Usuario(req):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     return render(req, "busca_usuarios.html")
 
 @login_required
 def Crea_Usuario(req):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
 
     if req.method == 'POST':
 
@@ -221,6 +314,17 @@ def Crea_Usuario(req):
     
 @login_required
 def Usuario_List(req):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     datos = Usuarios.objects.all()
     print('method', req.method)
     print('GET', req.GET)
@@ -229,10 +333,32 @@ def Usuario_List(req):
 
 @login_required        
 def Lista_Usuario(req):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     return render(req, "dato_creado.html")
 
 @login_required
 def Busca_Usuario(req: HttpRequest):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     print('method', req.method)
     print('GET', req.GET)
     if req.GET["nombre"]:
@@ -273,6 +399,17 @@ class UsuarioDetail(LoginRequiredMixin, DetailView):
 
 @login_required
 def UsuarioUpdate(req, id):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     usuario = Usuarios.objects.get(id=id)
     print(f'{usuario.user}')
     if req.method == 'POST':
@@ -309,6 +446,17 @@ def UsuarioUpdate(req, id):
 
 @login_required
 def UsuarioDelete(req, id):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     print('method', req.method)
     print('GET', req.GET)
     usuario = Usuarios.objects.get(id=id)
@@ -324,10 +472,21 @@ def UsuarioDelete(req, id):
 ########### Categorias ##############
 @login_required
 def Pagina_Categoria(req):
-    return render(req, "categorias.html")
+    return render(req, "busca_categorias.html")
 
 @login_required
 def Crea_Categoria(req):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     print('method', req.method)
     print('POST', req.POST)
     if req.method == 'POST':
@@ -351,12 +510,12 @@ def Busca_Categoria(req: HttpRequest):
         dato = req.GET["nombre"]
         #datos = Categorias.objects.get(nombre=dato)
         #datos = Categorias.objects.filter(nombre=dato)
-        datos = Categorias.objects.filter(nombreCategoria__icontains=dato)
+        datos = Categorias.objects.filter(nombreCategoria__icontains=dato.upper())
         print (f'{datos}')
         if datos.exists():
             pass
         else:
-            datos = Categorias.objects.filter(ubicacion__icontains=dato)
+            datos = Categorias.objects.filter(ubicacion__icontains=dato.upper())
             if datos.exists():
                 pass
             else:
@@ -368,6 +527,17 @@ def Busca_Categoria(req: HttpRequest):
 
 @login_required    
 def Categoria_List(req):
+    groups_required = ['GrupoClientes','GrupoUsuarios']
+    #groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     datos = Categorias.objects.all()
     print('method', req.method)
     print('GET', req.GET)
@@ -376,6 +546,17 @@ def Categoria_List(req):
 
 @login_required
 def CategoriaDelete(req, id):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            #return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     print('method', req.method)
     print('GET', req.GET)
     categoria = Categorias.objects.get(id=id)
@@ -387,6 +568,17 @@ def CategoriaDelete(req, id):
 
 @login_required
 def CategoriaUpdate(req, id):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            #return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     categoria = Categorias.objects.get(id=id)
     if req.method == 'POST':
 
@@ -414,18 +606,34 @@ class CategoriaDetail(LoginRequiredMixin, DetailView):
 
 
 ########### Articulos ##############
+
 @login_required
 def Pagina_Articulo(req):
-    return render(req, "articulos.html")
+    return render(req, "busca_articulos.html")
 
 @login_required
 def Crea_Articulo(req):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            #return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     print('method', req.method)
     print('POST', req.POST)
     if req.method == 'POST':
         miFormulario = FormularioArticulos(req.POST, req.FILES)
         if miFormulario.is_valid():
             data = miFormulario.cleaned_data
+            print(data["imagen"])
+            if data["imagen"] == None:
+                data["imagen"]='/imagenes/sinimagen.png'
+
             articulo = Articulos(sku=data["sku"].upper(), 
                                    nombre=data["nombre"].upper(),
                                    precio=data["precio"],
@@ -466,11 +674,22 @@ def Articulo_List(req):
     datos = Articulos.objects.all()
     print('method', req.method)
     print('GET', req.GET)
-    print(f'{datos}')
+    print({datos.values('imagen')})
     return render(req, "articulos_list.html", {"lista_articulos": datos})
 
 @login_required
 def ArticuloDelete(req, id):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            #return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     print('method', req.method)
     print('GET', req.GET)
     articulo = Articulos.objects.get(id=id)
@@ -482,20 +701,34 @@ def ArticuloDelete(req, id):
 
 @login_required
 def ArticuloUpdate(req, id):
+    #groups_required = ['GrupoClientes','GrupoUsuarios']
+    groups_required = ['GrupoUsuarios']
+    grupos_usuario = req.user.groups.all().values('name')
+    print (grupos_usuario)
+    for grupo in grupos_usuario:
+        print({grupo.values()})
+        if grupo['name'] in groups_required:
+            pass
+        else:
+            return render(req, "mensajes.html", {"mensaje": "no tiene permisos para esta opcion!"})
+            #return render(req, "inicio.html", {"mensaje": "no tiene permisos para esta opcion!"})
     articulo = Articulos.objects.get(id=id)
+    print(articulo.imagen)
+
     if req.method == 'POST':
 
         miFormulario = FormularioArticulos(req.POST, req.FILES)
 
         if miFormulario.is_valid():
-
             data = miFormulario.cleaned_data
             articulo.sku = data["sku"]
             articulo.nombre = data["nombre"].upper()
             articulo.precio = data["precio"]
             articulo.id_categoria = data["id_categoria"]
-            articulo.imagen = data["imagen"]
+            if data["imagen"]:
+                articulo.imagen = data["imagen"]
             articulo.save()
+            print(data["imagen"])
             datos = Articulos.objects.all()
             return render(req, "articulos_list.html", {"lista_articulos": datos})
     else:
@@ -531,13 +764,38 @@ def loginView(req):
             if user:
                 login(req, user)
                 print(f'{user.first_name}')
-                return render(req, "inicio.html", {"mensaje": f"Bienvenido {nombre}!"})
+                return render(req, "mensajes.html", {"mensaje": f'Biembenido(a) {user.first_name} {user.last_name}'})
             
-        return render(req, "inicio.html", {"mensaje": f"Datos incorrectos"})
+        return render(req, "mensajes.html", {"mensaje": f'Usuario o Contraseña incorrectos!!'})
     else:
         miFormulario = AuthenticationForm()
         return render(req, "login.html", {"miFormulario": miFormulario})
-   
+
+@login_required    
+def Comentario_Articulo_List(req, id):
+    articulo = Articulos.objects.get(id=id)
+    print(articulo.id)
+    print(articulo.nombre)
+    comentarios = ComentarioArticulos.objects.filter(sku=articulo.id)
+    print('method', req.method)
+    print('GET', req.GET)
+    return render(req, "comentarios_list.html", {"lista_comentarios": comentarios, "articulo": articulo})
+
+def CreaComentario(req, id):
+
+    articulo = Articulos.objects.get(id=id)
+    print('method', req.method)
+    print('POST', req.POST)
+    if req.POST["comentario"]:
+        data = req.POST["comentario"]
+        dato = ComentarioArticulos(sku_id=id, comentario=data)
+        dato.save()
+        comentarios = ComentarioArticulos.objects.filter(sku=id)
+        return render(req, "comentarios_list.html", {"lista_comentarios": comentarios, "articulo": articulo})
+    else:
+        comentarios = ComentarioArticulos.objects.filter(sku=id)
+        return render(req, "comentarios_list.html", {"lista_comentarios": comentarios, "articulo": articulo})
+
 def PasswordUpdate(req):
 
     usuario = req.user
@@ -558,3 +816,51 @@ def PasswordUpdate(req):
     else:
         miFormulario = UserEditForm(instance=usuario)
         return render(req, "cambia_password.html", {"miFormulario": miFormulario})
+    
+def agregar_avatar(req):
+    avatar = Avatar.objects.get(user=req.user)
+    print(avatar.imagen)
+    print(avatar.id)
+    if req.method == 'POST':
+
+        miFormulario = AvatarFormulario(req.POST, req.FILES)
+
+        if miFormulario.is_valid():
+            
+            data = miFormulario.cleaned_data
+            print(data["imagen"])
+            if data["imagen"]:
+                avatar = Avatar(id=avatar.id, user=req.user, imagen=data["imagen"])
+                avatar.save()
+            return render(req, "mensajes.html", {"mensaje": "Avatar actualizados con éxito!"})
+
+    else:
+        miFormulario = AvatarFormulario()
+        return render(req, "agregarAvatar.html", {"miFormulario": miFormulario})
+    
+def contacto(req):
+    if req.method == 'POST':
+
+        info = req.POST
+        miFormulario = ContactoFormulario(req.POST)
+        #miFormulario = ContactoFormulario({
+        #    "nombre": info["nombre"],
+        #    "correo": info["correo"],
+        #    "tipo_consulta": info["tipo_consulta"],
+        #    "mensaje": info["mensaje"],
+        #    "avisos": info["avisos"]
+        #})
+        if miFormulario.is_valid():
+            print(info)
+            data = miFormulario.cleaned_data
+            contacto = Contacto(nombre=data["nombre"], 
+                                correo=data["correo"], 
+                                tipo_consulta=data["tipo_consulta"], 
+                                mensaje=data["mensaje"], 
+                                avisos=data["avisos"])
+            contacto.save() 
+        
+        return render(req, "mensajes.html", {"mensaje": "Mensaje Enviado!"})
+    else:
+        miFormulario = ContactoFormulario()
+        return render(req, 'contacto.html', {"miFormulario": miFormulario})
