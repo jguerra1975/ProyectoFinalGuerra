@@ -843,13 +843,6 @@ def contacto(req):
 
         info = req.POST
         miFormulario = ContactoFormulario(req.POST)
-        #miFormulario = ContactoFormulario({
-        #    "nombre": info["nombre"],
-        #    "correo": info["correo"],
-        #    "tipo_consulta": info["tipo_consulta"],
-        #    "mensaje": info["mensaje"],
-        #    "avisos": info["avisos"]
-        #})
         if miFormulario.is_valid():
             print(info)
             data = miFormulario.cleaned_data
