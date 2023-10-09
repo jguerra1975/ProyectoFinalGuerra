@@ -28,7 +28,7 @@ def inicio(req):
         return render(req, "inicio.html")
 
 ########### Clientes ##############
-
+@login_required
 def Pagina_Cliente(req):
     #groups_required = ['GrupoClientes','GrupoUsuarios']
     groups_required = ['GrupoUsuarios']
