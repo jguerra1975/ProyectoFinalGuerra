@@ -45,4 +45,5 @@ urlpatterns = [
     path('update_pass/', PasswordUpdate, name="CambiaPassword"),
     path('agregar-avatar/', agregar_avatar, name="AgregarAvatar"),
     path('contactanos/', contacto, name="mensajecontacto"),
+    path('about/', mi_about, name="About"),
 ]

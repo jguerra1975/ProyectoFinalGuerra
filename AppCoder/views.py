@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
@@ -9,8 +9,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User, Group
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.contrib import messages
 from .models import Articulos, Categorias, Clientes, Usuarios, Avatar, ComentarioArticulos, Contacto
 from .forms import FormularioClientes, FormularioCategorias, FormularioArticulos, UserCreateForm, FormularioUsuarios, UserEditForm, AvatarFormulario, ContactoFormulario
+
 
 # Create your views here.
 
@@ -79,6 +84,10 @@ def Crea_Cliente(req):
             
             cliente = Clientes(dni=data["dni"], nombre=data["nombre"], apellidoPaterno=data["apellidoPaterno"], apellidoMaterno=data["apellidoMaterno"], email=data["email"], user=user)
             cliente.save() 
+
+            foto='\avatares\sin-imagen-user.png'
+            avatar = Avatar(user=user, imagen=foto)
+            avatar.save()
 
             return render(req, "dato_creado.html", {"vista": 'Cliente'})
         else:
@@ -303,6 +312,10 @@ def Crea_Usuario(req):
             usuario = Usuarios(dni=data["dni"], nombre=data["nombre"], apellidoPaterno=data["apellidoPaterno"], apellidoMaterno=data["apellidoMaterno"], email=data["email"], user=user)
             usuario.save() 
 
+            foto='\avatares\sin-imagen-user.png'
+            avatar = Avatar(user=user, imagen=foto)
+            avatar.save()
+            
             return render(req, "dato_creado.html", {"vista": 'Usuario'})
         else:
             return render(req, "FormularioUsuarios.html", {"miFormulario": miFormulario, "userForm": userForm})
@@ -846,14 +859,41 @@ def contacto(req):
         if miFormulario.is_valid():
             print(info)
             data = miFormulario.cleaned_data
-            contacto = Contacto(nombre=data["nombre"], 
+            print (data["correo"])
+            print (data["avisos"])
+            contacto = Contacto(nombre=data["nombre"].capitalize(), 
                                 correo=data["correo"], 
                                 tipo_consulta=data["tipo_consulta"], 
                                 mensaje=data["mensaje"], 
                                 avisos=data["avisos"])
             contacto.save() 
-        
-        return render(req, "mensajes.html", {"mensaje": "Mensaje Enviado!"})
+            if data["avisos"]:
+                message_contacto = "y Seras Contactado a la Brevedad"
+            else:
+                message_contacto = ''
+            template = render_to_string('email_template.html', {'name': data["nombre"].capitalize(), 
+                                                                'email': data["correo"], 
+                                                                'message': data["mensaje"],
+                                                                'message_contacto': message_contacto
+                                                                })
+            
+            consulta = ('Consulta', 'Reclamo', 'Sugerencia', 'Felicitaciones')  
+            subject = consulta[data["tipo_consulta"]]
+            email = EmailMessage(
+                subject,
+                template,
+                settings.EMAIL_HOST_USER,
+                ['javierguerra6@gmail.com']
+            )
+            email.fail_silently = False
+            email.send()
+
+            messages.success(req, 'Se ha enviado tu correo. ')
+            return redirect('mensajecontacto')
     else:
         miFormulario = ContactoFormulario()
         return render(req, 'contacto.html', {"miFormulario": miFormulario})
+    
+def mi_about(req):
+    pass
+    return render(req, 'about.html')

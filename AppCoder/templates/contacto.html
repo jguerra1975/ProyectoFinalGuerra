@@ -4,6 +4,18 @@
 {% block contenidoQuecambia %}
         <h6>Contactanos</h6>
         <form action="{% url 'mensajecontacto' %}" method="post">{% csrf_token %}
+
+            
+            {% if messages %}
+                
+                {% for message in messages %}
+                <div class="alert alert-primary" role="alert">
+                    {{message}}
+                  </div>                  
+                {% endfor %}
+                    
+            {% endif %}
+                
             {{miFormulario.as_p}}
             
             <button type="submit"> Enviar </button>
